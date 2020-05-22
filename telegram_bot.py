@@ -31,7 +31,7 @@ class TelegramBot:
             answer = "I'm sorry, but I didn't understand 😔"
 
         json_data = {"chat_id": chat_id, "text": answer, "parse_mode": "Markdown"}
-
+        # covid_data.get_last_two_days()
         return json_data
 
     def get_help(self):

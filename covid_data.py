@@ -31,27 +31,36 @@ class CovidData:
     def get_country_all_status(self, country):
         url = API_COVID + "/total/country/" + country
         data = requests.get(url)
-        today_status = data.json()[-1]
-        return today_status
+        last_status = data.json()[-2:]
+        return last_status
 
     def get_current_status_string(self, country):
-        status = self.get_country_all_status(country)
-        if type(status) == dict:
-            date = iso_to_date(status["Date"])
+        try:
+            status = self.get_country_all_status(country)
+            yesterday, today = status[0], status[1]
+
+            date = iso_to_date(today["Date"])
             status_as_string = f"""
 📆 {date}
 
-_ Coronavirus report from {status["Country"]}_ {FLAGS.get(status["Country"], "")}
+_ Coronavirus report from {today["Country"]}_ {FLAGS.get(today["Country"], "")}
 🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠
 
-Confirmed cases: {status["Confirmed"]}
-Total deaths: {status["Deaths"]}
-Recovered: {status["Recovered"]}
+Confirmed cases: {today["Confirmed"]} (+{self.get_diff_string(today["Confirmed"], yesterday["Confirmed"])})
+Total deaths: {today["Deaths"]} (+{today["Deaths"] - yesterday["Deaths"]})
+Recovered: {today["Recovered"]} (+{today["Recovered"] - yesterday["Recovered"]})
 
-Active cases: {status["Active"]}
+Active cases: {today["Active"]} ({self.get_active_cases_change(today["Active"], yesterday["Active"])})
 """
-        else:
+        except:
             status_as_string = (
                 "Didn't find anything. Is the *name of the country* correctly spelled?"
             )
         return status_as_string
+
+    def get_active_cases_change(self, today, yesterday):
+        sign = "+" if today > yesterday else "-"
+        return sign + self.get_diff_string(today, yesterday)
+
+    def get_diff_string(self, today, yesterday):
+        return str(today - yesterday)
