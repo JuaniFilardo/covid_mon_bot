@@ -42,12 +42,3 @@ def slugify(text):
 def iso_to_date(isodate):
     isodate = isodate.split("Z")[0]
     return datetime.datetime.fromisoformat(isodate).date().strftime("%A %d. %B %Y")
-
-
-def get_country_emoji_flag(country):
-    with open("data/flag-emojis.json") as f:
-        flags = json.load(f)
-        for f in flags:
-            if f["code"] == country or f["name"] == country:
-                return f["emoji"]
-        return ""
