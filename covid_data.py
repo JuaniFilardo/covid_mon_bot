@@ -43,8 +43,8 @@ class CovidData:
             status_as_string = f"""
 📆 {date}
 
-_ Coronavirus report from {today["Country"]}_ {FLAGS.get(today["Country"], "")}
-🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠
+_{today["Country"]}: COVID-19 Report _ {FLAGS.get(today["Country"], "")}
+🦠🦠🦠🦠🦠🦠🦠🦠
 
 Confirmed cases: {today["Confirmed"]} (+{today["Confirmed"] - yesterday["Confirmed"]})
 Total deaths: {today["Deaths"]} (+{today["Deaths"] - yesterday["Deaths"]})

@@ -19,16 +19,18 @@ class TelegramBot:
 
         if command == "/start":
             answer = self.get_start_message()
-        elif command == "/help":
+        elif command == "/help" or command == "/help@covid_mon_bot":
             answer = self.get_help()
-        elif command == "/stats":
+        elif command == "/stats" or command == "/stats@covid_mon_bot":
             if len(message):
                 country = slugify(message)
                 answer = covid_data.get_current_status_string(country)
             else:
                 answer = "Which country do you want info from? Try Argentina or AR"
-        elif command == "/countries":
+        elif command == "/countries" or command == "/countries@covid_mon_bot":
             answer = covid_data.get_countries_string()
+        elif command is None or command == "":
+            answer = "Hi! What can I do for you?"
         else:
             answer = "I'm sorry, but I didn't understand 😔"
 
