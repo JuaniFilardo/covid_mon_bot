@@ -46,7 +46,7 @@ class CovidData:
 _ Coronavirus report from {today["Country"]}_ {FLAGS.get(today["Country"], "")}
 🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠🦠
 
-Confirmed cases: {today["Confirmed"]} (+{self.get_diff_string(today["Confirmed"], yesterday["Confirmed"])})
+Confirmed cases: {today["Confirmed"]} (+{today["Confirmed"] - yesterday["Confirmed"]})
 Total deaths: {today["Deaths"]} (+{today["Deaths"] - yesterday["Deaths"]})
 Recovered: {today["Recovered"]} (+{today["Recovered"] - yesterday["Recovered"]})
 
@@ -60,7 +60,4 @@ Active cases: {today["Active"]} ({self.get_active_cases_change(today["Active"], 
 
     def get_active_cases_change(self, today, yesterday):
         sign = "+" if today > yesterday else "-"
-        return sign + self.get_diff_string(today, yesterday)
-
-    def get_diff_string(self, today, yesterday):
-        return str(today - yesterday)
+        return sign + str(abs(today - yesterday))
