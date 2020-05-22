@@ -1,5 +1,6 @@
 import requests
 import datetime
+import math
 
 from config import API_COVID
 from utils import slugify, iso_to_date
@@ -41,16 +42,17 @@ class CovidData:
 
             date = iso_to_date(today["Date"])
             status_as_string = f"""
-📆 {date}
+Last available data is from {date} 📆
 
-_{today["Country"]}: COVID-19 Report _ {FLAGS.get(today["Country"], "")}
-🦠🦠🦠🦠🦠🦠🦠🦠
+_COVID-19 Report for {today["Country"]}_ {FLAGS.get(today["Country"], "")}
+{self.get_virus_emoji(today["Active"])}
+
+There are {today["Active"]} active cases in {today["Country"]}, {self.get_active_cases_change(today["Active"], yesterday["Active"])}
 
 Confirmed cases: {today["Confirmed"]} (+{today["Confirmed"] - yesterday["Confirmed"]})
-Total deaths: {today["Deaths"]} (+{today["Deaths"] - yesterday["Deaths"]})
+Deaths: {today["Deaths"]} (+{today["Deaths"] - yesterday["Deaths"]})
 Recovered: {today["Recovered"]} (+{today["Recovered"] - yesterday["Recovered"]})
 
-Active cases: {today["Active"]} ({self.get_active_cases_change(today["Active"], yesterday["Active"])})
 """
         except:
             status_as_string = (
@@ -59,5 +61,16 @@ Active cases: {today["Active"]} ({self.get_active_cases_change(today["Active"], 
         return status_as_string
 
     def get_active_cases_change(self, today, yesterday):
-        sign = "+" if today > yesterday else "-"
-        return sign + str(abs(today - yesterday))
+        sign = (
+            "more than on the previous day 😕"
+            if today > yesterday
+            else "less than on the previous day 👏"
+        )
+        return f"{abs(today - yesterday)} {sign}"
+
+    def get_virus_emoji(self, active_cases):
+        virus_emoji = "🦠"
+        clap_emoji = "👏"
+        if active_cases > 3:
+            return virus_emoji * int(math.log(active_cases))
+        return clap_emoji

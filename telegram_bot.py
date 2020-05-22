@@ -26,7 +26,7 @@ class TelegramBot:
                 country = slugify(message)
                 answer = covid_data.get_current_status_string(country)
             else:
-                answer = "Which country do you want info from? Try Argentina or AR"
+                answer = "Which country do you want info from? Try /stats `Argentina` or /stats `AR`"
         elif command == "/countries" or command == "/countries@covid_mon_bot":
             answer = covid_data.get_countries_string()
         elif command is None or command == "":
@@ -46,12 +46,14 @@ class TelegramBot:
 
     def get_help(self):
         return """
-Country statistics: /stats `<country_code>`
-For example: 
-/stats us
-/stats United States
+1️⃣ Get latest info from a country: `/stats <country_code>`
+For example:
+    `/stats us`
+    `/stats United States`
 
-Countries list: /countries
+Tip: the number between parenthesis will tell you the latest observed increase.
+
+2️⃣ Get list of available countries: /countries
 """
 
     def get_chat_id(self, data):
