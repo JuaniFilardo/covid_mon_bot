@@ -17,7 +17,9 @@ class TelegramBot:
         message = parsed_message.get("message")
         covid_data = CovidData()
 
-        if command == "/help":
+        if command == "/start":
+            answer = self.get_start_message()
+        elif command == "/help":
             answer = self.get_help()
         elif command == "/stats":
             if len(message):
@@ -33,6 +35,12 @@ class TelegramBot:
         json_data = {"chat_id": chat_id, "text": answer, "parse_mode": "Markdown"}
         # covid_data.get_last_two_days()
         return json_data
+
+
+    def get_start_message(self):
+        return """Hi! You can try sending
+/stats `<country_code>`
+"""
 
     def get_help(self):
         return """
