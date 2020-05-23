@@ -2,6 +2,7 @@ import requests
 
 from config import TELEGRAM_SEND_MESSAGE_URL, BASE_TELEGRAM_URL
 from covid_data import CovidData
+from countries_data import CountriesData
 from utils import slugify
 from typing import Dict
 
@@ -33,13 +34,19 @@ class TelegramBot:
             answer = covid_data.get_countries_string()
         elif command is None or command == "":
             answer = "Hi! What can I do for you?"
+
+        elif command == "/report" or command == "/report@covid_mon_bot":
+            countries = CountriesData()
+            countries.set_countries_dict()
+            country = slugify(message)
+            answer = "Experimental feature! "
+            answer += countries.get_report(country)
+
         else:
             answer = "I'm sorry, but I didn't understand 😔"
 
         json_data = {"chat_id": chat_id, "text": answer, "parse_mode": "Markdown"}
-        # covid_data.get_last_two_days()
         return json_data
-
 
     def get_start_message(self):
         return """Hi! You can try sending something like
@@ -49,6 +56,13 @@ class TelegramBot:
 /stats United States
 /stats UK
 /stats United Kingdom
+/world
+
+You can also try the new feature:
+/report Argentina
+/report US
+/report World
+/report Europe
 """
 
     def get_help(self):
@@ -59,6 +73,13 @@ class TelegramBot:
     /stats `United States`
 
 - Get list of available countries: /countries
+
+- Get current info from the whole world: /world
+
+- Get more updated reports (can be buggy): /report `<country_name>`
+  For example:
+    /report `us`
+    /report `world`
 """
 
     def get_chat_id(self, data):

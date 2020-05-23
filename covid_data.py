@@ -3,7 +3,7 @@ import datetime
 import math
 
 from config import API_COVID
-from utils import slugify, iso_to_date
+from utils import slugify, iso_to_date, get_virus_emoji
 from data.country_flags import FLAGS
 
 
@@ -45,7 +45,7 @@ class CovidData:
 Last available data is from {date} 📆
 
 _COVID-19 Report for {today["Country"]}_ {FLAGS.get(today["Country"], "")}
-{self.get_virus_emoji(today["Active"])}
+{get_virus_emoji(today["Active"])}
 
 There are {today["Active"]} active cases in {today["Country"]}, {self.get_active_cases_trend(today["Active"], yesterday["Active"])}
 
@@ -69,13 +69,6 @@ Recovered: {today["Recovered"]} (+{today["Recovered"] - yesterday["Recovered"]})
         elif yesterday > today:
             trend = "less than on the previous day 👏"
         return f"{abs(today - yesterday)} {trend}"
-
-    def get_virus_emoji(self, active_cases):
-        virus_emoji = "🦠"
-        clap_emoji = "👏"
-        if active_cases > 3:
-            return virus_emoji * int(math.log(active_cases))
-        return clap_emoji
 
     def get_world_status(self):
         url = API_COVID + "/world/total"
