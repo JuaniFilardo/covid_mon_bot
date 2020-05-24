@@ -27,7 +27,7 @@ class CountriesData:
         ]
 
     def create_countries_dict(self):
-        """Reads the CSV and transforms it into a dictionary which keys are 
+        """Reads the CSV and transforms it into a dictionary in which keys are 
         the country names, while each value is another dictionary with that 
         country's data.
         """
@@ -46,17 +46,19 @@ class CountriesData:
     def dump_countries_dict(self):
         with open(self.json_filename, "w") as fout:
             json.dump(self.countries, fout, indent=2)
+        print("Created new json file.")
 
     def set_countries_dict(self):
         with open(self.json_filename) as fin:
             self.countries = json.load(fin)
 
     def get_country(self, country_name):
-        return self.countries.get(country_name)
+        return self.countries.get(country_name, {})
 
     def get_report(self, country_name):
         country = self.get_country(country_name)
-        if country:
+
+        if country.get("Country"):
             if country.get("ActiveCases") != "N/A":
                 emojis = utils.get_virus_emoji(
                     utils.string_to_int(country.get("ActiveCases"))
@@ -95,16 +97,17 @@ Recovered: {country.get("TotalRecovered")}
 {tests_per_million}
 """
         else:
-            report = "Is the country name correct?"
+            report = "Is the country name correctly spelled? Try /report USA"
         return report
 
+
     def get_cases_trend(self, new_cases):
-        if new_cases == "":
+        if not new_cases:
             return "There are no new reported cases yet."
         elif new_cases == "+1":
-            return "There has been only one more case today."
+            return "So far, only one case has been reported today."
         else:
-            return f"There have been {new_cases[1:]} more cases today."
+            return f"So far, {new_cases[1:]} more cases have been reported today."
 
     def get_deaths_trend(self, new_deaths):
         return f"({new_deaths})" if new_deaths else ""
@@ -114,5 +117,5 @@ if __name__ == "__main__":
     countries = CountriesData()
     countries.create_countries_dict()
     countries.dump_countries_dict()
-    countries.set_countries_dict()
-    print(countries.countries["argentina"])
+    # countries.set_countries_dict()
+    # print(countries.countries["argentina"])

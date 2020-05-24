@@ -58,3 +58,23 @@ def string_to_int(value):
         return int(value.replace(",", ""))
     except:
         return 0
+
+
+def translate_country(country_name):
+    """Tries to account for the fact that there's different ways to
+    write the name of the same country, and the slugification alone 
+    doesn't not standardise it. Also, it'll be of help to some spanish users.
+    """
+    translation_dict = {
+        "us": "usa",
+        "united-states": "usa",
+        "united-states-of-america": "usa",
+        "estados-unidos": "usa",
+        "eeuu": "usa",
+        "united-kingdom": "uk",
+        "great-britain": "uk",
+        "arg": "argentina",
+        "ar": "argentina",
+        "brasil": "brazil"
+    }
+    return translation_dict.get(country_name, country_name)
