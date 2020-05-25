@@ -252,6 +252,7 @@ FLAGS = {
     "Vietnam": "\ud83c\uddfb\ud83c\uddf3",
     "Vanuatu": "\ud83c\uddfb\ud83c\uddfa",
     "Wallis & Futuna": "\ud83c\uddfc\ud83c\uddeb",
+    "World": "🌎 🌍 🌏",
     "Samoa": "\ud83c\uddfc\ud83c\uddf8",
     "Kosovo": "\ud83c\uddfd\ud83c\uddf0",
     "Yemen": "\ud83c\uddfe\ud83c\uddea",

@@ -14,9 +14,13 @@ class TelegramBot:
     def prepare_response(self, data: Dict) -> Dict:
         chat_id = self.get_chat_id(data)
         parsed_message = self.parse_message(data)
+        
         command = parsed_message.get("command")
         message = parsed_message.get("message")
+        
         covid_data = CovidData()
+        countries = CountriesData()
+        countries.set_countries_dict()
 
         if command == "/start":
             answer = self.get_start_message()
@@ -29,14 +33,13 @@ class TelegramBot:
             else:
                 answer = "Which country do you want info from? Try /stats `Argentina` or /stats `AR`"
         elif command == "/world" or command == "/world@covid_mon_bot":
-            answer = covid_data.get_world_status_string()
+            # answer = covid_data.get_world_status_string()
+            answer = countries.get_report("world")
         elif command == "/countries" or command == "/countries@covid_mon_bot":
             answer = covid_data.get_countries_string()
         elif command is None or command == "":
             answer = "Hi! What can I do for you?"
         elif command == "/report" or command == "/report@covid_mon_bot":
-            countries = CountriesData()
-            countries.set_countries_dict()
             country = translate_country(slugify(message))
             answer = countries.get_report(country)
         else:
