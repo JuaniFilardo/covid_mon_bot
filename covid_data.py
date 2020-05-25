@@ -53,6 +53,7 @@ Confirmed cases: {today["Confirmed"]} (+{today["Confirmed"] - yesterday["Confirm
 Deaths: {today["Deaths"]} (+{today["Deaths"] - yesterday["Deaths"]})
 Recovered: {today["Recovered"]} (+{today["Recovered"] - yesterday["Recovered"]})
 
+_Hint: you can also try /report {today["Country"]} for more info_
 """
         except:
             status_as_string = (
